@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # 3rd
     "django_extensions",
+    "taggit",
     # apps
     "blog.apps.BlogConfig",
 ]
@@ -131,4 +132,4 @@ STATICFILES_DIRS = [str(BASE_DIR / "static"), ]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-from django.core.management.utils import get_random_secret_key
+TAGGIT_CASE_INSENSITIVE = True
