@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "taggit",
     # apps
+    "accounts.apps.AccountsConfig",
     "blog.apps.BlogConfig",
 ]
 
@@ -133,3 +134,5 @@ STATICFILES_DIRS = [str(BASE_DIR / "static"), ]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 TAGGIT_CASE_INSENSITIVE = True
+
+AUTH_USER_MODEL = "accounts.User"
