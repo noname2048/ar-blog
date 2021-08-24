@@ -3,3 +3,8 @@ __pycache__
 secrets.env
 .ipynb_checkpoints
 .python-version
+
+# temp commentation
+/static
+# temp commentation
+/templates
