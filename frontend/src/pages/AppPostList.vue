@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-
     <MainMenu></MainMenu>
 
     <v-main>
@@ -13,7 +12,7 @@
 </template>
 
 <script>
-import MainMenu from '../components/MainMenu.vue';
+import MainMenu from "../components/MainMenu.vue";
 import PostList from "../components/PostList.vue";
 
 export default {

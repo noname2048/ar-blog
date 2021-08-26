@@ -5,7 +5,7 @@
       :items="posts"
       sort-by="name"
       class="elevation-1"
-      items-per-page=5
+      :items-per-page="5"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -193,13 +193,13 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.posts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.posts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
