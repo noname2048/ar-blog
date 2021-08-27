@@ -22,6 +22,10 @@
       <v-spacer></v-spacer>
 
       <v-btn text href="/">Home</v-btn>
+      <v-btn text href="/blog/post/list/">blog</v-btn>
+      <v-btn text href="/admin/">Admin</v-btn>
+      <v-btn text>/</v-btn>
+      <v-btn text href="/">Home</v-btn>
       <v-btn text href="/post_list.html">PostList</v-btn>
       <v-btn text href="/post_detail.html">PostDetail</v-btn>
 
@@ -65,7 +69,7 @@ export default {
       { title: "Photos", icon: "mdi-image" },
       { title: "About", icon: "mdi-help-box" },
     ],
-  })
+  }),
 };
 </script>
 

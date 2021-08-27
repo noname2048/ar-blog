@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-
     <MainMenu></MainMenu>
 
     <v-main>

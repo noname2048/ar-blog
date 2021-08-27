@@ -1,6 +1,5 @@
 <template>
   <v-app id="inspire">
-
     <MainMenu></MainMenu>
 
     <v-main>
@@ -13,8 +12,8 @@
 </template>
 
 <script>
-import MainMenu from '../components/MainMenu.vue';
-import PostDetail from '../components/PostDetail.vue';
+import MainMenu from "../components/MainMenu.vue";
+import PostDetail from "../components/PostDetail.vue";
 
 export default {
   components: { MainMenu, PostDetail },
