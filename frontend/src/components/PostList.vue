@@ -100,7 +100,7 @@
         </v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">
+        <v-btn color="primary" @click="fetchPostList">
           Reset
         </v-btn>
       </template>
@@ -109,6 +109,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "HelloWorld",
 
@@ -120,15 +122,15 @@ export default {
         text: "ID",
         align: "start",
         sortable: false,
-        value: "name",
+        value: "id",
       },
-      { text: "제 목", value: "calories" },
-      { text: "요약", value: "fat" },
-      { text: "수정일", value: "carbs" },
-      { text: "작성자", value: "protein" },
+      { text: "제 목", value: "title" },
+      { text: "요약", value: "description" },
+      { text: "수정일", value: "modify_dt" },
+      { text: "작성자", value: "owner" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [],
+    posts: [],
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -162,34 +164,24 @@ export default {
   },
 
   created() {
-    this.initialize();
+    this.fetchPostList();
   },
 
   methods: {
-    initialize() {
-      this.posts = [
-        {
-          name: 1,
-          calories: "Django 3.0 Realeased",
-          fat: "2019년 12월 장고 3.0 버전 발표함",
-          carbs: "2020-07-13",
-          protein: "shkim",
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-      ];
+
+    async fetchPostList() {
+      console.group("fetchPostList()...");
+
+      try {
+        const res = await axios.get('/api/post/list/');
+        console.log("POST GET RES", res);
+        this.posts = res.data;
+      } catch (err) {
+        console.error(err);
+        alert(err.response.status + ' ' + err.response.statusText);
+      }
+
+      console.groupEnd();
     },
 
     editItem(item) {
