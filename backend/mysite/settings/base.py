@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "taggit",
     # apps
+    "api.apps.ApiConfig",
     "accounts.apps.AccountsConfig",
     "blog.apps.BlogConfig",
 ]
