@@ -20,6 +20,7 @@ def obj_to_post(obj):
 
     return post
 
+
 def prev_next_post(obj):
     try:
         prev_obj = obj.get_prev()
@@ -35,3 +36,31 @@ def prev_next_post(obj):
 
     return prev_dict, next_dict
 
+
+def make_tag_cloud(qs_tag):
+    min_count = min(tag.count for tag in qs_tag)
+    max_count = max(tag.count for tag in qs_tag)
+
+    def get_weight_func(min_weight, max_weight):
+        if min_count == max_count:
+            factor = 1.0
+        else:
+            factor = (max_weight - min_weight) / (max_count - min_count)
+
+        def func(count):
+            weight = round(min_weight + factor * (count - min_count))
+            return weight
+
+        return func
+
+    weight_func = get_weight_func(1, 5)
+    tag_list = []
+    for tag in qs_tag:
+        weight = weight_func(tag.count)
+        tag_list.append({
+            "name": tag.name,
+            "count": tag.count,
+            "weight": weight,
+        })
+
+    return tag_list

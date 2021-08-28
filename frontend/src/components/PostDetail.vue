@@ -45,19 +45,19 @@
             {{ post.next.title }}
           </h2>
         </v-card>
-        <v-card class="pa-2" outlined tile>
+        <v-card class="pa-2" tile>
           <h2>Tag cloud</h2>
-          <v-chip class="ma-2" color="green" text-color="white">
-            <v-avatar class="green darken-4">
-              1
+          <v-chip
+            v-for="(tag, index) in tagCloud"
+            :key="index"
+            class="ma-2"
+            :color="tag.color"
+            text-color="white"
+          >
+            <v-avatar left :class="tag.color + ' darken-4'">
+              {{ tag.count }}
             </v-avatar>
-            python
-          </v-chip>
-          <v-chip class="ma-2" color="green" text-color="white">
-            <v-avatar class="green darken-4">
-              1
-            </v-avatar>
-            django
+            {{ tag.name }}
           </v-chip>
         </v-card>
       </v-col>
@@ -73,12 +73,14 @@ export default {
 
   data: () => ({
     post: {},
+    tagCloud: [],
   }),
 
   created() {
     console.log("created()...");
     const postId = 2;
     this.fetchPostDetail(postId);
+    this.fetchTagCloud();
   },
 
   methods: {
@@ -91,6 +93,24 @@ export default {
         this.post = res.data;
       } catch (err) {
         console.error("POST DETAIL GET ERR.RESPONSE", err.response);
+        alert(err.response.status + "" + err.response.statusText);
+      }
+    },
+
+    async fetchTagCloud() {
+      console.log("fetchTagCloud()...");
+
+      try {
+        const res = await axios.get(`/api/tag/cloud/`);
+        console.log("TAG CLOUD GET RES", res);
+        this.tagCloud = res.data;
+        this.tagCloud.forEach((element) => {
+          if (element.weight === 3) element.color = "green";
+          else if (element.weight === 2) element.color = "blue-gray";
+          else if (element.weight === 1) element.color = "gray";
+        });
+      } catch (err) {
+        console.error("TAG CLOUD GET ERR.RESPONSE", err.response);
         alert(err.response.status + "" + err.response.statusText);
       }
     },
