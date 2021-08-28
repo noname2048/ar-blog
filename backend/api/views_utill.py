@@ -19,3 +19,19 @@ def obj_to_post(obj):
     del post['_state']
 
     return post
+
+def prev_next_post(obj):
+    try:
+        prev_obj = obj.get_prev()
+        prev_dict = {"id": prev_obj.id, "title": prev_obj.title}
+    except obj.DoesNotExist as e:
+        prev_dict = {}
+
+    try:
+        next_obj = obj.get_next()
+        next_dict = {"id": next_obj.id, "title": next_obj.title}
+    except obj.DoesNotExist as e:
+        next_dict = {}
+
+    return prev_dict, next_dict
+
