@@ -80,7 +80,7 @@ export default {
 
   created() {
     console.log("created()...");
-    const postId = 2;
+    const postId = location.pathname.split('/')[3] || 2;
     this.fetchPostDetail(postId);
     this.fetchTagCloud();
   },

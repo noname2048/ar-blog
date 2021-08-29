@@ -6,10 +6,11 @@
       sort-by="name"
       class="elevation-1"
       :items-per-page="5"
+      @click:row="serverPage"
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Post List</v-toolbar-title>
+          <v-toolbar-title>Post List<span v-if="tagname" class="body-1 font-italic ml-3">(with {{ tagname }} tagged)</span></v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
@@ -99,11 +100,13 @@
           mdi-delete
         </v-icon>
       </template>
+
       <template v-slot:no-data>
         <v-btn color="primary" @click="fetchPostList">
           Reset
         </v-btn>
       </template>
+
     </v-data-table>
   </v-container>
 </template>
@@ -165,17 +168,17 @@ export default {
 
   created() {
     const params = new URL(location).searchParams;
-    const paramTag = params.get('tagname');
-    this.fetchPostList(paramTag);
+    this.tagname = params.get('tagname');
+    this.fetchPostList();
   },
 
   methods: {
-    async fetchPostList(paramTag) {
+    async fetchPostList() {
       console.group("fetchPostList()...");
-      console.group("fetchPostList()...", paramTag);
+      console.group("fetchPostList()...", this.tagname);
 
       let getUrl = "";
-      if (paramTag) getUrl = `/api/post/list/?tagname=${paramTag}`;
+      if (this.tagename) getUrl = `/api/post/list/?tagname=${this.tagname}`;
       else getUrl = "/api/post/list/";
 
       try {
@@ -188,6 +191,11 @@ export default {
       }
 
       console.groupEnd();
+    },
+
+    serverPage(item) {
+      console.log("serverPage()...", item);
+      location.href = `/blog/post/${item.id}`;
     },
 
     editItem(item) {
@@ -234,3 +242,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-data-table >>> tbody > tr {
+  cursor: pointer;
+}
+</style>
