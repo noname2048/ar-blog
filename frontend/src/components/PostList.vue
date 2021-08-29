@@ -164,21 +164,27 @@ export default {
   },
 
   created() {
-    this.fetchPostList();
+    const params = new URL(location).searchParams;
+    const paramTag = params.get('tagname');
+    this.fetchPostList(paramTag);
   },
 
   methods: {
-
-    async fetchPostList() {
+    async fetchPostList(paramTag) {
       console.group("fetchPostList()...");
+      console.group("fetchPostList()...", paramTag);
+
+      let getUrl = "";
+      if (paramTag) getUrl = `/api/post/list/?tagname=${paramTag}`;
+      else getUrl = "/api/post/list/";
 
       try {
-        const res = await axios.get('/api/post/list/');
-        console.log("POST GET RES", res);
+        const res = await axios.get(getUrl);
+        console.log("POST LIST GET RES", res);
         this.posts = res.data;
       } catch (err) {
-        console.error(err);
-        alert(err.response.status + ' ' + err.response.statusText);
+        console.error("POST LIST GET ERR", err);
+        alert(err.response.status + " " + err.response.statusText);
       }
 
       console.groupEnd();
