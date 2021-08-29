@@ -14,10 +14,11 @@
           <div>
             <strong>TAGS:</strong>
             <v-chip
-              class="ma-2"
+              class="ma-2 my-hover"
               outlined
               v-for="(tag, index) in post.tags"
               :key="index"
+              @click="serverPage(tag)"
               >{{ tag }}</v-chip
             >
           </div>
@@ -50,9 +51,10 @@
           <v-chip
             v-for="(tag, index) in tagCloud"
             :key="index"
-            class="ma-2"
+            class="ma-2 my-hover"
             :color="tag.color"
             text-color="white"
+            @click="serverPage(tag.name)"
           >
             <v-avatar left :class="tag.color + ' darken-4'">
               {{ tag.count }}
@@ -114,6 +116,11 @@ export default {
         alert(err.response.status + "" + err.response.statusText);
       }
     },
+
+    serverPage(tagname) {
+      console.log("serverPage()...", tagname);
+      location.href = `/blog/post/list/?tagname=${tagname}`;
+    }
   },
 };
 </script>
