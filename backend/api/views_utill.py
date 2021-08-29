@@ -53,7 +53,7 @@ def make_tag_cloud(qs_tag):
 
         return func
 
-    weight_func = get_weight_func(1, 5)
+    weight_func = get_weight_func(1, 3)
     tag_list = []
     for tag in qs_tag:
         weight = weight_func(tag.count)
