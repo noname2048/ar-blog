@@ -10,7 +10,15 @@ from blog.models import Post
 
 
 class ApiPostLV(BaseListView):
-    model = Post
+    # model = Post
+
+    def get_queryset(self):
+        tagname = self.request.GET.get("tagname")
+        if tagname:
+            qs = Post.objects.filter(tags__name=tagname)
+        else:
+            qs = Post.objects.all()
+        return qs
 
     def render_to_response(self, context, **response_kwargs):
         qs = context["object_list"]
