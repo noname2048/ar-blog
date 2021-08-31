@@ -65,7 +65,7 @@
           <v-toolbar-title>Login form</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
-          <v-form>
+          <v-form id="login-form">
             <v-text-field
               label="Username"
               name="username"
@@ -83,8 +83,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="dialog.login = false">Cancel</v-btn>
-          <v-btn color="primary" class="mr-5" @click="dialog.login = false">Login</v-btn>
+          <v-btn text color="grey" @click="cancel('login')">Cancel</v-btn>
+          <v-btn color="primary" class="mr-5" @click="save('login')">Login</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -168,6 +168,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data: () => ({
     drawer: null,
@@ -175,14 +177,56 @@ export default {
       login: false,
       register: false,
       logout: false,
-      changePassword: false,
+      pwdchg: false,
     },
+    me: {},
     items: [
       { title: "Dashboard", icon: "mdi-view-dashboard" },
       { title: "Photos", icon: "mdi-image" },
       { title: "About", icon: "mdi-help-box" },
     ],
   }),
+
+  methods: {
+    cancel(kind) {
+      console.log("cancel()...", kind);
+      if (kind === 'login') this.dialog.login = false;
+      else if (kind === 'register') this.dialog.register = false;
+      else if (kind === 'pwdchg') this.dialog.pwdchg = false;
+      else { console.log("wrong cancel kind")}
+    },
+
+    save(kind) {
+      console.log("save()...", kind);
+      if (kind === 'login') {
+        this.login();
+        this.dialog.login = false;
+      } else if (kind === 'register') {
+        this.register();
+        this.dialog.register = false;
+      } else if (kind === 'pwdchg') {
+        this.pwdchg();
+        this.dialog.pwdchg = false;
+      }
+    },
+
+    async login() {
+      console.log('login()...');
+      const postData = new FormData(document.getElementById('login-form'));
+      try {
+        const res = await axios.post('/api/login/', postData);
+        console.log("LOGIN POST RES", res);
+        alert(`user ${res.data.username} login OK`);
+        this.me = res.data;
+      } catch (err) {
+        console.log("LOGIN POST ERR.RESPONSE", err.response);
+        alert("login NOK");
+      }
+
+    }
+
+
+  }
 };
 </script>
 
