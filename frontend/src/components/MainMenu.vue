@@ -52,7 +52,7 @@
           </template>
 
           <template v-else>
-            <v-list-item>
+            <v-list-item @click="logout">
               <v-list-item-title>Logout</v-list-item-title>
             </v-list-item>
             <v-list-item @click="dialogOpen('pwdchg')">
@@ -269,6 +269,19 @@ export default {
       } catch (err) {
         console.log("REGISTER POST ERR.RESPONSE", err.response);
         alert("REGISTER NOK");
+      }
+    },
+
+    async logout() {
+      console.log("logout...");
+      try {
+        const res = await axios.get("/api/logout/");
+        console.log("LOGOUT GET RES", res);
+        alert(`user ${this.me.username} logout OK`);
+        this.me = { username: "Anonymous" };
+      } catch (err) {
+        console.log("LOGOUT GET ERR.RESPONSE", err.response);
+        alert("logout NOK");
       }
     },
   },
