@@ -284,6 +284,19 @@ export default {
         alert("logout NOK");
       }
     },
+
+    async pwdchg() {
+      console.log("pwdchg()...");
+      const postData = new FormData(document.getElementById("pwdchg-form"));
+      try {
+        const res = await axios.post("/api/pwdchg/", postData);
+        console.log("PWDCHG POST RES", res);
+        alert(`user ${this.me.username} password change OK`);
+      } catch (err) {
+        console.log("PWDCHG POST ERR.RESPONSE", err.response);
+        alert("PWDCHG NOK");
+      }
+    }
   },
 };
 </script>
