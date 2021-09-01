@@ -127,10 +127,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="dialog.register = false"
-            >Cancel</v-btn
-          >
-          <v-btn color="success" class="mr-5" @click="dialog.register = false"
+          <v-btn text color="grey" @click="cancel('register')">Cancel</v-btn>
+          <v-btn color="success" class="mr-5" @click="save('register')"
             >Register</v-btn
           >
         </v-card-actions>
@@ -167,8 +165,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn text color="grey" @click="dialog.pwdchg = false">Cancel</v-btn>
-          <v-btn color="warning" class="mr-5" @click="dialog.pwdchg = false"
+          <v-btn text color="grey" @click="cancel('pwdchg')">Cancel</v-btn>
+          <v-btn color="warning" class="mr-5" @click="save('pwdchg')"
             >change password</v-btn
           >
         </v-card-actions>
@@ -258,6 +256,19 @@ export default {
       } catch (err) {
         console.log("LOGIN POST ERR.RESPONSE", err.response);
         alert("login NOK");
+      }
+    },
+
+    async register() {
+      console.log("register()...");
+      const postData = new FormData(document.getElementById("register-form"));
+      try {
+        const res = await axios.post("/api/register/", postData);
+        console.log("REGISTER POST RES", res);
+        alert(`user ${res.data.username} created OK`);
+      } catch (err) {
+        console.log("REGISTER POST ERR.RESPONSE", err.response);
+        alert("REGISTER NOK");
       }
     },
   },
