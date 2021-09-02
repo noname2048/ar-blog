@@ -118,6 +118,7 @@
 
 <script>
 import axios from "axios";
+import EventBus from "./event_bus";
 
 export default {
   data: () => ({
@@ -141,6 +142,7 @@ export default {
     editedIndex: -1,
     editedItem: {},
     actionKind: "",
+    me: { username: "Anonymous" },
   }),
 
   computed: {
@@ -155,6 +157,10 @@ export default {
     const params = new URL(location).searchParams;
     this.tagname = params.get("tagname");
     this.fetchPostList();
+
+    EventBus.$on("me_change", (val) => {
+      this.me = val;
+    });
   },
 
   methods: {
@@ -222,6 +228,7 @@ export default {
     async updatePost() {
       console.log("updatePost()...");
       const postData = new FormData(document.getElementById("post-form"));
+      postData.set('owner', this.me.id);
       try {
         const res = await axios.post(
           `/api/post/${this.editedItem.id}/update/`,
