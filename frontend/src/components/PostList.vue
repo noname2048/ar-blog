@@ -5,7 +5,7 @@
       :items="posts"
       sort-by="name"
       class="elevation-1"
-      :items-per-page="5"
+      :items-per-page="10"
       @click:row="serverPage"
     >
       <template v-slot:top>
@@ -32,7 +32,7 @@
         <v-icon small class="mr-2" @click.stop="dialogOpen('update', item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click.stop="deletItem(item)">
+        <v-icon small @click.stop="deletePost(item)">
           mdi-delete
         </v-icon>
       </template>
@@ -207,7 +207,11 @@ export default {
     save() {
       console.log("save()...");
       if (this.actionKind === "create") this.createPost();
-      else this.updatePost();
+      else if (this.actionKind === "update") this.updatePost();
+      else {
+        console.log("save() gets wrong arguments");
+        alert("save() gets wrong arguments");
+      }
       this.dialog = false;
     },
 

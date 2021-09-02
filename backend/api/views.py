@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic.detail import BaseDetailView
-from django.views.generic.edit import BaseCreateView, BaseUpdateView
+from django.views.generic.edit import BaseCreateView, BaseUpdateView, BaseDeleteView
 from django.views.generic.list import BaseListView
 from taggit.models import Tag
 
@@ -142,3 +142,12 @@ class ApiPostUV(BaseUpdateView):
 
     def form_invalid(self, form):
         return JsonResponse(data=form.errors, safe=True, status=400)
+
+
+class ApiPostDelV(BaseDeleteView):
+    model = Post
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return JsonResponse(data={}, safe=True, status=204)
