@@ -1,9 +1,10 @@
-from django.contrib.auth import login, get_user_model, logout, update_session_auth_hash
+from django.contrib.auth import login, get_user_model, logout, update_session_auth_hash, get_user
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.edit import BaseCreateView
@@ -95,6 +96,36 @@ class ApiPwdchgView(PasswordChangeView):
         form.save()
         update_session_auth_hash(self.request, form.user)
         return JsonResponse(data={}, safe=True, status=200)
+
+    def form_invalid(self, form):
+        return JsonResponse(data=form.errors, safe=True, status=400)
+
+
+class ApiMeView(View):
+
+    def get(self, request, *args, **kwargs):
+        user = get_user(request)
+        if user.is_authenticated:
+            userdict = {
+                "id": user.id,
+                "username": user.username,
+            }
+        else:
+            userdict = {
+                "username": "Anonymous",
+            }
+        return JsonResponse(data=userdict, safe=True, status=200)
+
+
+class ApiPostCV(BaseCreateView):
+    model = Post
+    fields = "__all__"
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        self.object = form.save()
+        post = obj_to_post(self.object)
+        return JsonResponse(data=post, safe=True, status=201)
 
     def form_invalid(self, form):
         return JsonResponse(data=form.errors, safe=True, status=400)

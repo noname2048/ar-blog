@@ -17,7 +17,7 @@
     <v-app-bar app clipped-left color="indigo" dark>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Vue.js - Django web Porgramming</v-toolbar-title>
+      <v-toolbar-title>Vue.js - Django web Porkamming</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -198,6 +198,10 @@ export default {
     ],
   }),
 
+  created() {
+    this.getUserInfo(); 
+  },
+
   methods: {
     dialogOpen(kind) {
       console.log("dialogOpen()...", kind);
@@ -296,7 +300,19 @@ export default {
         console.log("PWDCHG POST ERR.RESPONSE", err.response);
         alert("PWDCHG NOK");
       }
-    }
+    },
+
+    async getUserInfo() {
+      console.log("getUserInfo()...");
+      try {
+        const res = await axios.get("/api/me/");
+        console.log("GETUSERINFO GET RES", res);
+        this.me = res.data;
+      } catch (err) {
+        console.error("GETUSERINFO GET ERR.RESPONSE", err.response);
+        alert(err.response.status + ' ' + err.response.statusText);
+      }
+    },
   },
 };
 </script>

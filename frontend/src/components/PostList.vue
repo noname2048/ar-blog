@@ -10,93 +10,29 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Post List<span v-if="tagname" class="body-1 font-italic ml-3">(with {{ tagname }} tagged)</span></v-toolbar-title>
+          <v-toolbar-title
+            >Post List<span v-if="tagname" class="body-1 font-italic ml-3"
+              >(with {{ tagname }} tagged)</span
+            ></v-toolbar-title
+          >
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                New Post
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.name"
-                        label="Dessert name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.calories"
-                        label="Calories"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.fat"
-                        label="Fat (g)"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.carbs"
-                        label="Carbs (g)"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.protein"
-                        label="Protein (g)"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancel
-                </v-btn>
-                <v-btn color="blue darken-1" text @click="save">
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
-                >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
-                >
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <v-btn
+            color="primary"
+            dark
+            class="mb-2"
+            @click.stop="dialogOpen('create', {})"
+          >
+            New Post
+          </v-btn>
         </v-toolbar>
       </template>
 
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">
+        <v-icon small class="mr-2" @click.stop="dialogOpen('update', item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="deleteItem(item)">
+        <v-icon small @click.stop="deletItem(item)">
           mdi-delete
         </v-icon>
       </template>
@@ -106,8 +42,77 @@
           Reset
         </v-btn>
       </template>
-
     </v-data-table>
+
+    <v-dialog v-model="dialog" max-width="800px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">{{ formTitle }}</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-form id="post-form" ref="postForm">
+            <v-text-field
+              label="ID"
+              name="id"
+              v-model="editedItem.id"
+              readonly
+            ></v-text-field>
+            <v-text-field
+              label="TITLE"
+              name="title"
+              v-model="editedItem.title"
+            ></v-text-field>
+            <v-text-field
+              label="DESCRIPTION"
+              name="description"
+              v-model="editedItem.description"
+            ></v-text-field>
+            <v-textarea
+              outlined
+              label="CONTENT"
+              name="content"
+              v-model="editedItem.content"
+            ></v-textarea>
+            <v-text-field
+              label="OWNER"
+              name="owner"
+              v-model="editedItem.owner"
+              readonly
+            ></v-text-field>
+            <v-text-field
+              label="TAGS"
+              name="tags"
+              v-model="editedItem.tags"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="cancel()">
+            Cancel
+          </v-btn>
+          <v-btn color="blue darken-1" text @click="save()">
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialogDelete" max-width="500px">
+      <v-card>
+        <v-card-title class="text-h5"
+          >Are you sure you want to delete this item?</v-card-title
+        >
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="cancel()">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="save()">Save</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -115,8 +120,6 @@
 import axios from "axios";
 
 export default {
-  name: "HelloWorld",
-
   data: () => ({
     dialog: false,
     dialogDelete: false,
@@ -133,49 +136,30 @@ export default {
       { text: "작성자", value: "owner" },
       { text: "Actions", value: "actions", sortable: false },
     ],
+    tagname: "",
     posts: [],
     editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-    defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
+    editedItem: {},
+    actionKind: "",
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
-  },
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
+      // return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      if (this.actionKind === "create") return "Create Item";
+      else return "Update Item";
     },
   },
 
   created() {
     const params = new URL(location).searchParams;
-    this.tagname = params.get('tagname');
+    this.tagname = params.get("tagname");
     this.fetchPostList();
   },
 
   methods: {
     async fetchPostList() {
-      console.group("fetchPostList()...");
-      console.group("fetchPostList()...", this.tagname);
+      console.log("fetchPostList()...", "tagname", this.tagname);
 
       let getUrl = "";
       if (this.tagename) getUrl = `/api/post/list/?tagname=${this.tagname}`;
@@ -189,8 +173,6 @@ export default {
         console.error("POST LIST GET ERR", err);
         alert(err.response.status + " " + err.response.statusText);
       }
-
-      console.groupEnd();
     },
 
     serverPage(item) {
@@ -198,46 +180,75 @@ export default {
       location.href = `/blog/post/${item.id}`;
     },
 
-    editItem(item) {
-      this.editedIndex = this.posts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+    dialogOpen(actionKind, item) {
+      console.log("dialogOpen()...", actionKind);
+      this.actionKind = actionKind;
+      if (actionKind === "create") {
+        this.editedIndex = -1;
+        this.editedItem = {};
+      } else {
+        this.editedIndex = this.posts.indexOf(item);
+        this.editedItem = Object.assign({}, item); // shallow merge
+      }
       this.dialog = true;
     },
 
-    deleteItem(item) {
-      this.editedIndex = this.posts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
-    close() {
+    cancel() {
+      console.log("cancel()...");
       this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      } else {
-        this.desserts.push(this.editedItem);
+      console.log("save()...");
+      if (this.actionKind === "create") this.createPost();
+      else this.updatePost();
+      this.dialog = false;
+    },
+
+    async createPost() {
+      console.log("createPost()...");
+      const postData = new FormData(document.getElementById("post-form"));
+      try {
+        const res = await axios.post("/api/post/create/", postData);
+        console.log("CREATEPOST POST RES", res);
+        this.posts.push(res.data);
+      } catch (err) {
+        console.error("CREATEPOST POST ERR.RESPONSE", err.response);
+        const { status, statusText } = err.response;
+        alert(status + " " + statusText);
       }
-      this.close();
+    },
+
+    async updatePost() {
+      console.log("updatePost()...");
+      const postData = new FormData(document.getElementById("post-form"));
+      try {
+        const res = await axios.post(
+          `/api/post/${this.editedItem.id}/update/`,
+          postData
+        );
+        console.log("CREATEPOST POST RES", res);
+        this.posts.splice(this.editedIndex, 1, res.data);
+      } catch (err) {
+        console.error("CREATEPOST POST ERR.RESPONSE", err.response);
+        const { status, statusText } = err.response;
+        alert(status + " " + statusText);
+      }
+    },
+
+    async deletePost(item) {
+      console.log("deletePost()...", item);
+      if (!confirm("Are you sure to delete?")) return;
+      try {
+        const res = await axios.delete(`/api/post/${item.id}/delete`);
+        console.log("DELETEPOST DELETE RES", res);
+        const index = this.posts.indexOf(item);
+        this.posts.splice(index, 1);
+      } catch (err) {
+        console.log("DLETEPOST DELETE ERR.RESPONSE", err.response);
+        const { status, statusText } = err.response;
+        alert(status + " " + statusText);
+      }
     },
   },
 };
