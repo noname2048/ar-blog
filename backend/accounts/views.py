@@ -1,3 +1,22 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
+from django.http import JsonResponse
 from django.shortcuts import render
 
-# Create your views here.
+
+class MyLoginRequiredMixin(LoginRequiredMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            data = {"message": "login required (401) !"}
+            return JsonResponse(data=data, safe=True, status=401)
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class OwnerOnlyMixin(AccessMixin):
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if request.user != self.object.owner:
+            data = {"message": "Owner only can update or delete post (403)"}
+            return JsonResponse(data=data, safe=True, status=403)
+
+        return super().dispatch(request, *args, **kwargs)

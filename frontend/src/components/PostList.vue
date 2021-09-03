@@ -188,6 +188,10 @@ export default {
 
     dialogOpen(actionKind, item) {
       console.log("dialogOpen()...", actionKind);
+      if (this.me.username === "Anonymous") {
+        alert("Please login first!");
+        return;
+      }
       this.actionKind = actionKind;
       if (actionKind === "create") {
         this.editedIndex = -1;
@@ -249,6 +253,10 @@ export default {
 
     async deletePost(item) {
       console.log("deletePost()...", item);
+      if (this.me.username === "Anonymous") {
+        alert("Please login first!");
+        return;
+      }
       if (!confirm("Are you sure to delete?")) return;
       try {
         const res = await axios.delete(`/api/post/${item.id}/delete`);
