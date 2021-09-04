@@ -168,7 +168,7 @@ export default {
       console.log("fetchPostList()...", "tagname", this.tagname);
 
       let getUrl = "";
-      if (this.tagename) getUrl = `/api/post/list/?tagname=${this.tagname}`;
+      if (this.tagname) getUrl = `/api/post/list/?tagname=${this.tagname}`;
       else getUrl = "/api/post/list/";
 
       try {
