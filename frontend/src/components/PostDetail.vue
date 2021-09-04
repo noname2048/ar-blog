@@ -71,7 +71,7 @@
 import axios from "axios";
 
 export default {
-  name: "HelloWorld",
+  // name: "HelloWorld",
 
   data: () => ({
     post: {},
@@ -80,7 +80,8 @@ export default {
 
   created() {
     console.log("created()...");
-    const postId = location.pathname.split('/')[3] || 2;
+    // const postId = location.pathname.split('/')[3] || 2;
+    const postId = location.pathname.split('/')[3];
     this.fetchPostDetail(postId);
     this.fetchTagCloud();
   },
