@@ -81,7 +81,9 @@ export default {
   created() {
     console.log("created()...");
     // const postId = location.pathname.split('/')[3] || 2;
-    const postId = location.pathname.split('/')[3];
+    // const postId = location.pathname.split('/')[3];
+    const params  = new URL(location).searchParams;
+    const postId = params.get('id');
     this.fetchPostDetail(postId);
     this.fetchTagCloud();
   },
@@ -120,7 +122,8 @@ export default {
 
     serverPage(tagname) {
       console.log("serverPage()...", tagname);
-      location.href = `/blog/post/list/?tagname=${tagname}`;
+      // location.href = `/blog/post/list/?tagname=${tagname}`;
+      location.href = `/post_list.html?tagname=${tagname}`;
     }
   },
 };
