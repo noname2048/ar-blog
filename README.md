@@ -12,19 +12,44 @@
 
 ## memo
 - node --version
+
 - npm cache clean -f
+
 - npm install -g npm
+
 - upm update -g @vue/cli
+
 - yarn build (@frontend)
+
 - v-main 을 제외하고 레이아웃용 컴포넌트에는 app 속성이 들어가야한다
+
 - yarn add filemanager-webpack-plugin-fixed -D
+
 - <%= htmlWebpackPlugin.options.favicon %>
+
 - yarn add html-webpack-plugin
+
 - vscode extension: IntelliJ IDEA Keybindings
+
 - created(compile template) -> beforeMount(rendering) -> mounted(mount)
+
 - Tag.objects.annotate(cnt=Count("Post"))
+
 - x for x in range(3): generator
+
 - deep selector >>> (v-data-table >>> tbody > tr)
+
 - login, register / logout, password change
+
 - popup, modal, dialog
-- dㅇ
+
+- ```
+  location /static/ {
+  	root /django_static_directory	
+  }
+  
+  collectstatic
+  STATIC_ROOT
+  ```
+
+- 
